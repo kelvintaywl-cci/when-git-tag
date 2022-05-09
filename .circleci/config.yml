@@ -1,0 +1,44 @@
+version: 2.1
+
+jobs:
+  tagged:
+    parameters:
+      info:
+        type: string
+    resource_class: small
+    docker:
+      - image: cimg/base:stable
+    steps:
+      - run:
+          name: Print information
+          command: echo << parameters.info >>
+
+workflows:
+  with-tag-filter-no-when:
+    jobs:
+      - tagged:
+          info: "with tag filter, but no when"
+          filters:
+            tags:
+              only: /^v.*/
+  no-tag-filter-with-when:
+    when:
+      and:
+        - matches:
+            pattern: "^v.*$"
+            value: << pipeline.git.tag >>
+    jobs:
+      - tagged:
+          info: "no tag filter, but with when"
+  with-tag-filter-and-when:
+    when:
+      and:
+        - matches:
+            pattern: "^v.*$"
+            value: << pipeline.git.tag >>
+    jobs:
+      - tagged:
+          info: "no tag filter, but with when"
+          filters:
+            tags:
+              only: /^v.*/
