@@ -21,6 +21,8 @@ workflows:
           filters:
             tags:
               only: /^v.*/
+            branches:
+              ignore: /.*/
   no-tag-filter-with-when:
     when:
       and:
@@ -42,3 +44,5 @@ workflows:
           filters:
             tags:
               only: /^v.*/
+            branches:
+              ignore: /.*/
